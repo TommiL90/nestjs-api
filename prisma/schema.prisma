@@ -6,12 +6,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
-  id       String   @id 
+  id       String   @id
   name     String   @db.VarChar(120)
   email    String   @unique @db.VarChar(120)
   password String   @db.VarChar(120)
@@ -22,13 +24,14 @@ model User {
 }
 
 model Memory {
-  id          String   @id 
+  id          String   @id
   title       String   @db.VarChar(120)
-  description String   @unique @db.Text()
+  description String   @db.Text()
   coverImage  String?  @db.Text()
-  createdAt   DateTime 
+  createdAt   DateTime
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
 
   @@map("memories")
+  @@index([userId])
 }
