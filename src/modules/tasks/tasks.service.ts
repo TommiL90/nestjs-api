@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common'
 import { CreateTaskDto } from './dto/create-task.dto'
 import { UpdateTaskDto } from './dto/update-task.dto'
+import { TaskRepository } from './repositories/tasks.repostory'
 
 @Injectable()
 export class TasksService {
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task'
+  constructor(private readonly tasksRepository: TaskRepository) {}
+
+  async create(createTaskDto: CreateTaskDto, userId: string) {
+    const newTask = await this.tasksRepository.create(createTaskDto, userId)
+    return newTask
   }
 
-  findAll() {
-    return `This action returns all tasks`
+  async findTaskbyOwner(userId: string) {
+    const tasks = await this.tasksRepository.findAllByOwner(userId)
+    return tasks
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`
+  async findOne(id: string) {
+    const task = await this.tasksRepository.findOne(id)
+    return task
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
+    const updatedTask = await this.tasksRepository.update(id, updateTaskDto)
+    return updatedTask
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`
+  async remove(id: string) {
+    return await this.tasksRepository.delete(id)
   }
 }

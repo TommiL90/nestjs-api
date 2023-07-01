@@ -37,6 +37,7 @@ export class MemoriesService {
     return memory
   }
 
+  // eslint-disable-next-line no-undef
   async upload(id: string, coverImage: Express.Multer.File) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,

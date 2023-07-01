@@ -56,6 +56,7 @@ export class MemoriesController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'coverImage', maxCount: 1 }]))
   upload(
+    // eslint-disable-next-line no-undef
     @UploadedFiles() files: { coverImage?: Express.Multer.File[] },
     @Param('id') id: string,
   ) {

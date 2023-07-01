@@ -32,7 +32,6 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsBoolean()
-  @IsNotEmpty()
   @IsOptional()
   isAdmin: boolean
 
