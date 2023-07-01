@@ -10,13 +10,13 @@ import {
   Request,
   UseInterceptors,
   UploadedFiles,
-} from '@nestjs/common';
-import { MemoriesService } from './memories.service';
-import { CreateMemoryDto } from './dto/create-memory.dto';
-import { UpdateMemoryDto } from './dto/update-memory.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+} from '@nestjs/common'
+import { MemoriesService } from './memories.service'
+import { CreateMemoryDto } from './dto/create-memory.dto'
+import { UpdateMemoryDto } from './dto/update-memory.dto'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { FileFieldsInterceptor } from '@nestjs/platform-express'
 
 @ApiTags('Memories')
 @Controller('memories')
@@ -27,28 +27,28 @@ export class MemoriesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   create(@Body() createMemoryDto: CreateMemoryDto, @Request() req) {
-    return this.memoriesService.create(createMemoryDto, req.user.id);
+    return this.memoriesService.create(createMemoryDto, req.user.id)
   }
 
   @Get('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   findAllByOwner(@Request() req) {
-    return this.memoriesService.findAllByOwner(req.user.id);
+    return this.memoriesService.findAllByOwner(req.user.id)
   }
 
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
-    return this.memoriesService.findOne(id);
+    return this.memoriesService.findOne(id)
   }
 
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateMemoryDto: UpdateMemoryDto) {
-    return this.memoriesService.update(id, updateMemoryDto);
+    return this.memoriesService.update(id, updateMemoryDto)
   }
 
   @Patch('upload/:id')
@@ -56,17 +56,18 @@ export class MemoriesController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'coverImage', maxCount: 1 }]))
   upload(
+    // eslint-disable-next-line no-undef
     @UploadedFiles() files: { coverImage?: Express.Multer.File[] },
     @Param('id') id: string,
   ) {
-    const { coverImage } = files;
-    return this.memoriesService.upload(id, coverImage[0]);
+    const { coverImage } = files
+    return this.memoriesService.upload(id, coverImage[0])
   }
 
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string) {
-    return this.memoriesService.delete(id);
+    return this.memoriesService.delete(id)
   }
 }

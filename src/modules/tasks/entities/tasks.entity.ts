@@ -1,12 +1,13 @@
 import { randomUUID } from 'crypto'
 
-export class Memory {
+export class Task {
   readonly id: string
   title: string
   description: string
-  coverImage: string | null
-  userId: string
+  completed: boolean
   createdAt: Date
+  updatedAt: Date
+  userId: string
 
   constructor() {
     this.id = randomUUID()
