@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { hashSync } from 'bcryptjs';
-import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger'
+import { hashSync } from 'bcryptjs'
+import { Transform } from 'class-transformer'
 import {
   IsNotEmpty,
   IsString,
@@ -9,14 +9,14 @@ import {
   IsBoolean,
   IsOptional,
   MaxLength,
-} from 'class-validator';
+} from 'class-validator'
 
 export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MaxLength(120)
-  name: string;
+  name: string
 
   @ApiProperty({
     description: 'Email of the user',
@@ -28,13 +28,13 @@ export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(120)
-  email: string;
+  email: string
 
   @ApiProperty()
   @IsBoolean()
   @IsNotEmpty()
   @IsOptional()
-  isAdmin: boolean;
+  isAdmin: boolean
 
   @ApiProperty()
   @IsString()
@@ -44,5 +44,5 @@ export class CreateUserDto {
   @Transform(({ value }: { value: string }) => hashSync(value, 10), {
     groups: ['transform'],
   })
-  password: string;
+  password: string
 }

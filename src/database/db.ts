@@ -1,3 +1,3 @@
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from 'src/modules/users/entities/user.entity'
 
-export const users: User[] = [];
+export const users: User[] = []

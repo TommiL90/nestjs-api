@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger'
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator'
 
 export class CreateMemoryDto {
   @ApiProperty({
@@ -10,7 +10,7 @@ export class CreateMemoryDto {
   })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title: string
 
   @ApiProperty({
     description: 'Description of the memory',
@@ -20,7 +20,7 @@ export class CreateMemoryDto {
   })
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description: string
 
   @ApiProperty({
     description: 'Cover image of the memory',
@@ -31,5 +31,5 @@ export class CreateMemoryDto {
   @IsUrl()
   @IsNotEmpty()
   @IsOptional()
-  coverImage: string | null;
+  coverImage: string | null
 }

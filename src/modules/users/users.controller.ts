@@ -10,12 +10,12 @@ import {
   ClassSerializerInterceptor,
   HttpCode,
   UseGuards,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+} from '@nestjs/common'
+import { UsersService } from './users.service'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('Users')
 @Controller('users')
@@ -25,13 +25,13 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto)
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('')
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAll()
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -39,7 +39,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    return this.usersService.findOne(id)
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -47,7 +47,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserDto)
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -56,6 +56,6 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string) {
-    return this.usersService.delete(id);
+    return this.usersService.delete(id)
   }
 }
