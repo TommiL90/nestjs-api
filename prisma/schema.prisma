@@ -6,10 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  relationMode = "prisma"
+  relationMode      = "prisma"
 }
 
 model User {
@@ -18,7 +18,8 @@ model User {
   email    String   @unique @db.VarChar(120)
   password String   @db.VarChar(120)
   isAdmin  Boolean  @default(false)
-  Memory   Memory[]
+  memory   Memory[]
+  task     Task[]
 
   @@map("users")
 }
@@ -32,6 +33,20 @@ model Memory {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
 
-  @@map("memories")
   @@index([userId])
+  @@map("memories")
+}
+
+model Task {
+  id          String   @id
+  title       String   @db.VarChar(120)
+  description String   @db.Text()
+  completed   Boolean  @default(false)
+  createdAt   DateTime
+  updatedAt   DateTime @updatedAt()
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@index([userId])
+  @@map("tasks")
 }
