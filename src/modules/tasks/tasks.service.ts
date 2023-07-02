@@ -1,33 +1,43 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateTaskDto } from './dto/create-task.dto'
 import { UpdateTaskDto } from './dto/update-task.dto'
-import { TaskRepository } from './repositories/tasks.repostory'
+import { TasksRepository } from './repositories/tasks.repository'
 
 @Injectable()
 export class TasksService {
-  constructor(private readonly tasksRepository: TaskRepository) {}
+  constructor(private tasksRepository: TasksRepository) {}
 
   async create(createTaskDto: CreateTaskDto, userId: string) {
     const newTask = await this.tasksRepository.create(createTaskDto, userId)
     return newTask
   }
 
-  async findTaskbyOwner(userId: string) {
-    const tasks = await this.tasksRepository.findAllByOwner(userId)
+  findAllByOwner(userId: string) {
+    const tasks = this.tasksRepository.findAllByOwner(userId)
     return tasks
   }
 
   async findOne(id: string) {
     const task = await this.tasksRepository.findOne(id)
+    if (!task) {
+      throw new NotFoundException('Task not found')
+    }
     return task
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto) {
     const updatedTask = await this.tasksRepository.update(id, updateTaskDto)
+    if (!updatedTask) {
+      throw new NotFoundException('Task not found')
+    }
     return updatedTask
   }
 
   async remove(id: string) {
-    return await this.tasksRepository.delete(id)
+    const deletedTask = this.tasksRepository.delete(id)
+    if (!deletedTask) {
+      throw new NotFoundException('Task not found')
+    }
+    return deletedTask
   }
 }

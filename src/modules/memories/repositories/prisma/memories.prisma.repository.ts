@@ -11,7 +11,6 @@ export class MemoriesPrismaRepository implements MemoriesRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateMemoryDto, userId: string): Promise<Memory> {
-    console.log(data)
     const memory = new Memory()
     Object.assign(memory, { ...data })
 

@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common'
-import { TaskRepository } from '../tasks.repostory'
+import { plainToInstance } from 'class-transformer'
+import { TasksRepository } from '../tasks.repository'
 import { PrismaService } from 'src/database/prisma.service'
 import { CreateTaskDto } from '../../dto/create-task.dto'
-import { Task } from '../../entities/tasks.entity'
-import { plainToInstance } from 'class-transformer'
+import { Task } from '../../entities/task.entity'
 import { UpdateTaskDto } from '../../dto/update-task.dto'
 
 @Injectable()
-export class TasksPrismaRepository implements TaskRepository {
+export class TasksPrismaRepository implements TasksRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateTaskDto, userId: string): Promise<Task> {
-    console.log(data)
     const task = new Task()
     Object.assign(task, { ...data })
 
