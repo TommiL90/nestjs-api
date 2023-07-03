@@ -11,7 +11,6 @@ export class UserPrismaRepository implements UserRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto): Promise<User> {
-    console.log(data)
     const user = new User()
     Object.assign(user, { ...data })
     const newUser = await this.prisma.user.create({
