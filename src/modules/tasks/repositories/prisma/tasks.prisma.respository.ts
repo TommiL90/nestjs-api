@@ -20,9 +20,9 @@ export class TasksPrismaRepository implements TasksRepository {
     return plainToInstance(Task, newTask)
   }
 
-  async findAllByOwner(ownerId: string): Promise<Task[]> {
+  async findAllByOwner(ownerId: string, keywords?: string): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany({
-      where: { userId: ownerId },
+      where: { userId: ownerId, title: { contains: keywords || '' } },
     })
     return plainToInstance(Task, tasks)
   }

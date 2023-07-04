@@ -12,8 +12,8 @@ export class TasksService {
     return newTask
   }
 
-  findAllByOwner(userId: string) {
-    const tasks = this.tasksRepository.findAllByOwner(userId)
+  findAllByOwner(userId: string, keywords?: string) {
+    const tasks = this.tasksRepository.findAllByOwner(userId, keywords)
     return tasks
   }
 

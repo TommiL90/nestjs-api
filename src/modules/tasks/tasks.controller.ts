@@ -8,6 +8,7 @@ import {
   Delete,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common'
 import { TasksService } from './tasks.service'
 import { CreateTaskDto } from './dto/create-task.dto'
@@ -29,8 +30,8 @@ export class TasksController {
   @Get('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  findAllByOwner(@Request() req) {
-    return this.tasksService.findAllByOwner(req.user.id)
+  findAllByOwner(@Request() req, @Query('keywords') keywords?: string) {
+    return this.tasksService.findAllByOwner(req.user.id, keywords)
   }
 
   @Get(':id')
