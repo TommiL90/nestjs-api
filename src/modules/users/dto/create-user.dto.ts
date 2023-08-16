@@ -9,6 +9,7 @@ import {
   IsBoolean,
   IsOptional,
   MaxLength,
+  Matches,
 } from 'class-validator'
 
 export class CreateUserDto {
@@ -40,6 +41,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(6)
   @MaxLength(120)
+  @Matches(/.*[A-Z].*/, {
+    message: 'The password must contain at least one uppercase letter',
+  })
+  @Matches(/.*\d.*/, {
+    message: 'The password must contain at least one number',
+  })
   @Transform(({ value }: { value: string }) => hashSync(value, 10), {
     groups: ['transform'],
   })

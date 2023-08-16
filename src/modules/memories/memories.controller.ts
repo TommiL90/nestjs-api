@@ -17,6 +17,18 @@ import { UpdateMemoryDto } from './dto/update-memory.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
+import { Request as ExpressRequest } from 'express'
+import { Roles } from '../auth/roles.decorator'
+import { RolesGuard } from '../auth/roles.guard'
+import { UserRole } from 'src/common/role.enum'
+
+interface RequestWithUser extends ExpressRequest {
+  user: {
+    id: string
+    email: string
+    isAdmin: boolean
+  }
+}
 
 @ApiTags('Memories')
 @Controller('memories')
@@ -26,14 +38,17 @@ export class MemoriesController {
   @Post('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  create(@Body() createMemoryDto: CreateMemoryDto, @Request() req) {
+  create(
+    @Body() createMemoryDto: CreateMemoryDto,
+    @Request() req: RequestWithUser,
+  ) {
     return this.memoriesService.create(createMemoryDto, req.user.id)
   }
 
   @Get('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  findAllByOwner(@Request() req) {
+  findAllByOwner(@Request() req: RequestWithUser) {
     return this.memoriesService.findAllByOwner(req.user.id)
   }
 
@@ -66,7 +81,8 @@ export class MemoriesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.Admin, UserRole.User)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   delete(@Param('id') id: string) {
     return this.memoriesService.delete(id)
   }
