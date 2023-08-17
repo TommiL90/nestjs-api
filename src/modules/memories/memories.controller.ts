@@ -18,9 +18,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
 import { Request as ExpressRequest } from 'express'
-import { Roles } from '../auth/roles.decorator'
-import { RolesGuard } from '../auth/roles.guard'
-import { UserRole } from 'src/common/role.enum'
 
 interface RequestWithUser extends ExpressRequest {
   user: {
@@ -79,10 +76,11 @@ export class MemoriesController {
     return this.memoriesService.upload(id, coverImage[0])
   }
 
+  // @Roles(UserRole.Admin, UserRole.User)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   @ApiBearerAuth()
-  @Roles(UserRole.Admin, UserRole.User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string) {
     return this.memoriesService.delete(id)
   }
