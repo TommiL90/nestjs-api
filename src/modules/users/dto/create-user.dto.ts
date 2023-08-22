@@ -6,22 +6,30 @@ import {
   IsString,
   IsEmail,
   MinLength,
-  IsBoolean,
   IsOptional,
   MaxLength,
   Matches,
 } from 'class-validator'
+import { UserRole } from '../../../common/role.enum'
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'John Doe',
+    required: true,
+    description: 'The name of the user',
+    type: String,
+    minLength: 3,
+    maxLength: 120,
+  })
   @IsString()
   @IsNotEmpty()
   @MaxLength(120)
+  @MinLength(3)
   name: string
 
   @ApiProperty({
-    description: 'Email of the user',
     example: 'example@example.com',
+    description: 'Email of the user',
     required: true,
     type: String,
     default: 'example@example.com',
@@ -31,12 +39,18 @@ export class CreateUserDto {
   @MaxLength(120)
   email: string
 
-  @ApiProperty()
-  @IsBoolean()
+  @ApiProperty({
+    enum: UserRole,
+    default: UserRole.User,
+    description: 'The role of the user',
+  })
   @IsOptional()
-  isAdmin: boolean
+  role?: UserRole
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'pasSwo@rd123',
+    description: 'The password of the user',
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(6)

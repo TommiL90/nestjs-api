@@ -1,13 +1,16 @@
 import { randomUUID } from 'crypto'
 
-export class Task {
+export class Product {
   readonly id: string
-  title: string
+  name: string
+  price: number
   description: string
-  completed: boolean
+  stock: number
+  sku: string
+  categoryId: string
+  imageUrl: string
   createdAt: Date
   updatedAt: Date
-  userId: string
 
   constructor() {
     this.id = randomUUID()

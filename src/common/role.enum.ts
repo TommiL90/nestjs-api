@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 export enum UserRole {
-  User = 'user',
-  Admin = 'admin',
+  User = 'User',
+  Admin = 'Admin',
+  Employee = 'Employee',
 }
 
 export type UserRoleType = keyof typeof UserRole

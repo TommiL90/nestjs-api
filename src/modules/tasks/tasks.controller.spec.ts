@@ -1,11 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { TasksService } from './tasks.service'
-import { randomUUID } from 'crypto'
-import { Task } from './entities/task.entity'
+import { TestingModule, Test } from '@nestjs/testing'
+import { TasksController } from './tasks.controller'
 import { PrismaService } from '../../database/prisma.service'
-import { TasksRepository } from './repositories/tasks.repository'
 import { TasksPrismaRepository } from './repositories/prisma/tasks.prisma.repository'
-import { NotFoundException } from '@nestjs/common'
+import { TasksRepository } from './repositories/tasks.repository'
+import { TasksService } from './tasks.service'
+import { Task } from './entities/task.entity'
 
 const mockTasks: Task[] = [
   {
@@ -24,7 +23,7 @@ const mockTasks: Task[] = [
     completed: true,
     createdAt: new Date('2023-07-07T13:37:34.926Z'),
     updatedAt: new Date('2023-07-07T13:37:34.926Z'),
-    userId: randomUUID(),
+    userId: '1',
   },
   {
     id: '12345',
@@ -33,33 +32,27 @@ const mockTasks: Task[] = [
     completed: false,
     createdAt: new Date('2023-07-07T13:37:34.926Z'),
     updatedAt: new Date('2023-07-07T13:37:34.926Z'),
-    userId: randomUUID(),
+    userId: '2',
   },
 ]
 
-const expectedTasks: Task[] = [new Task(), new Task(), new Task(), new Task()]
-
 const prismaMock = {
   task: {
-    create: jest.fn().mockReturnValue(mockTasks[0]),
+    create: jest.fn(),
     findMany: jest.fn().mockResolvedValue(mockTasks),
-    findUnique: jest.fn((args) => {
-      if (args.where.id === 'invalidId') {
-        return null
-      }
-      return mockTasks[0]
-    }),
-    update: jest.fn().mockResolvedValue(mockTasks[0]),
-    remove: jest.fn(),
+    findUnique: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
   },
 }
 
-describe('TasksService', () => {
-  let service: TasksService
+describe('TodoController', () => {
+  let tasksController: TasksController
   let prismaService: PrismaService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [TasksController],
       providers: [
         TasksService,
         { provide: PrismaService, useValue: prismaMock },
@@ -67,34 +60,22 @@ describe('TasksService', () => {
       ],
     }).compile()
 
-    service = module.get<TasksService>(TasksService)
+    tasksController = module.get<TasksController>(TasksController)
     prismaService = module.get<PrismaService>(PrismaService)
   })
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should be defined', () => {
-    expect(service).toBeDefined()
+    expect(tasksController).toBeDefined()
     expect(prismaService).toBeDefined()
   })
 
-  describe('findOne', () => {
-    it('should find a task', async () => {
-      const taskId = '123'
-      const result = await service.findOne(taskId)
+  describe('findAllByOwner', () => {
+    it('should find tasks by owner', async () => {
+      const req = { user: { id: '1' } }
+      const keywords = undefined
 
-      expect(result).toEqual(mockTasks[0])
-    })
-
-    it('should throw a NotFoundException when an invalid id is provided', async () => {
-      const taskId = 'invalidId'
-
-      // Act and Assert
-      await expect(service.findOne(taskId)).rejects.toThrow(NotFoundException)
+      const result = await tasksController.findAllByOwner(req, keywords)
+      expect(result).toEqual(mockTasks)
     })
   })
-
-
 })

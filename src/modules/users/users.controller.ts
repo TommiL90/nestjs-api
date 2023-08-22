@@ -16,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { CreateNextAuthUserDto } from './dto/create-NextAuthUser.dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -26,6 +27,12 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto)
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor) // Utiliza el interceptor de serialización de clases
+  @Post('nextauth')
+  createNextAuth(@Body() createNextAuthUserDto: CreateNextAuthUserDto) {
+    return this.usersService.createNextAuthUser(createNextAuthUserDto)
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

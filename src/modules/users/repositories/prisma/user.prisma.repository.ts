@@ -1,10 +1,11 @@
 import { CreateUserDto } from '../../dto/create-user.dto'
 import { UpdateUserDto } from '../../dto/update-user.dto'
 import { User } from '../../entities/user.entity'
-import { UserRepository } from '../user.repositry'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/database/prisma.service'
 import { plainToInstance } from 'class-transformer'
+import { UserRepository } from '../user.repository'
+import { CreateNextAuthUserDto } from '../../dto/create-NextAuthUser.dto'
 
 @Injectable()
 export class UserPrismaRepository implements UserRepository {
@@ -17,6 +18,16 @@ export class UserPrismaRepository implements UserRepository {
       data: { ...user },
     })
     return plainToInstance(User, newUser)
+  }
+
+  async createNextAuthUser(data: CreateNextAuthUserDto): Promise<User> {
+    const user = new User()
+    Object.assign(user, { ...data })
+    const newUser = await this.prisma.user.create({
+      data: { ...user },
+    })
+
+    return newUser
   }
 
   async findAll(): Promise<User[]> {
