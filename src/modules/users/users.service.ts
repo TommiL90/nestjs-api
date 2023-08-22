@@ -6,7 +6,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './repositories/user.repository'
-import { CreateNextAuthUserDto } from './dto/create-NextAuthUser.dto'
+import { CreateNextAuthUserDto } from './dto/create-nextauth-user.dto'
 
 @Injectable()
 export class UsersService {
