@@ -1,4 +1,4 @@
-import { CreateNextAuthUserDto } from '../dto/create-NextAuthUser.dto'
+import { CreateNextAuthUserDto } from '../dto/create-nextauth-user.dto'
 import { CreateUserDto } from '../dto/create-user.dto'
 import { UpdateUserDto } from '../dto/update-user.dto'
 import { User } from '../entities/user.entity'

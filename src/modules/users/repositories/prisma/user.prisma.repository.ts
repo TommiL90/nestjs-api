@@ -2,10 +2,10 @@ import { CreateUserDto } from '../../dto/create-user.dto'
 import { UpdateUserDto } from '../../dto/update-user.dto'
 import { User } from '../../entities/user.entity'
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/database/prisma.service'
+import { PrismaService } from '../../../../database/prisma.service'
 import { plainToInstance } from 'class-transformer'
 import { UserRepository } from '../user.repository'
-import { CreateNextAuthUserDto } from '../../dto/create-NextAuthUser.dto'
+import { CreateNextAuthUserDto } from '../../dto/create-nextauth-user.dto'
 
 @Injectable()
 export class UserPrismaRepository implements UserRepository {
