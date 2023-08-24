@@ -6,6 +6,8 @@ import {
 import { ProductsRepository } from './repositories/products.repository'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
+import { v2 as cloudinary } from 'cloudinary'
+import { unlink } from 'fs'
 
 @Injectable()
 export class ProductsService {
@@ -39,6 +41,46 @@ export class ProductsService {
       throw new NotFoundException('Product not found')
     }
     return product
+  }
+
+  // eslint-disable-next-line no-undef
+  async upload(sku: string, coverImage: Express.Multer.File) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+    })
+
+    const findProduct = await this.productsRepository.findOne(sku)
+
+    if (!findProduct) {
+      throw new NotFoundException('Product not found')
+    }
+
+    const uploadedImage = await cloudinary.uploader.upload(
+      coverImage.path,
+      { resource_type: 'image' },
+      (error, result) => {
+        if (error) {
+          throw new NotFoundException('Image not found')
+        }
+        return result
+      },
+    )
+
+    console.log(uploadedImage)
+    const updatedProduct = await this.productsRepository.update(sku, {
+      ...UpdateProductDto,
+      imgUrl: uploadedImage.secure_url,
+    })
+
+    unlink(coverImage.path, (err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
+
+    return updatedProduct
   }
 
   remove(sku: string) {

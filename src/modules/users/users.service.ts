@@ -25,7 +25,7 @@ export class UsersService {
     const findUser = await this.usersRepository.findByEmail(createUserDto.email)
 
     if (findUser) {
-      throw new ConflictException('User already exists')
+      return findUser
     }
     return this.usersRepository.createNextAuthUser(createUserDto)
   }

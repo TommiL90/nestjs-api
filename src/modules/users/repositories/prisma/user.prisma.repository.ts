@@ -23,11 +23,13 @@ export class UserPrismaRepository implements UserRepository {
   async createNextAuthUser(data: CreateNextAuthUserDto): Promise<User> {
     const user = new User()
     Object.assign(user, { ...data })
-    const newUser = await this.prisma.user.create({
-      data: { ...user },
+    const loggedUser = await this.prisma.user.upsert({
+      where: { email: data.email },
+      create: { ...user },
+      update: {},
     })
 
-    return newUser
+    return loggedUser
   }
 
   async findAll(): Promise<User[]> {

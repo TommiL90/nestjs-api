@@ -11,5 +11,5 @@ export abstract class ProductsRepository {
     updateProductDto: UpdateProductDto,
   ): Promise<Product>
 
-  abstract remove(sku: string): Promise<Product>
+  abstract remove(sku: string): Promise<void>
 }

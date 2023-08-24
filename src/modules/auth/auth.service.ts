@@ -25,8 +25,21 @@ export class AuthService {
   async login(email: string) {
     const user = await this.userService.findByEmail(email)
     return {
+      role: user.role,
       token: this.jwtService.sign(
         { email, role: user.role },
+        { subject: user.id },
+      ),
+    }
+  }
+
+  async loginWithProviders(payload) {
+    const user = await this.userService.createNextAuthUser(payload)
+
+    return {
+      role: user.role,
+      token: this.jwtService.sign(
+        { email: user.email, role: user.role },
         { subject: user.id },
       ),
     }
