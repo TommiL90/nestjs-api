@@ -4,8 +4,6 @@ import { randomUUID } from 'crypto'
 export class Order {
   readonly id: string
 
-  description: string
-
   status: OrdersStatus
 
   totalPrice: number

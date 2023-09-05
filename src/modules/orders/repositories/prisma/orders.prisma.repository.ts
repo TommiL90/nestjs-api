@@ -39,7 +39,6 @@ export class OrdersPrismaRepository implements OrdersRepository {
         paid: order.paid,
         status: order.status,
         totalPrice: order.totalPrice,
-        description: order.description,
       },
       include: { products: true },
     })
