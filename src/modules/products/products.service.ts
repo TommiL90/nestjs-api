@@ -8,18 +8,26 @@ import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { v2 as cloudinary } from 'cloudinary'
 import { unlink } from 'fs'
+import { CategoriesService } from '../categories/categories.service'
 
 @Injectable()
 export class ProductsService {
-  constructor(private productsRepository: ProductsRepository) {}
+  constructor(
+    private productsRepository: ProductsRepository,
+    private categoriesService: CategoriesService,
+  ) {}
 
   async create(createProductDto: CreateProductDto) {
+    this.verifyCategory(createProductDto.categoryId)
+
     const findProduct = await this.productsRepository.findOne(
       createProductDto.sku,
     )
+
     if (findProduct) {
       throw new ConflictException('Product already exists')
     }
+
     return this.productsRepository.create(createProductDto)
   }
 
@@ -89,5 +97,13 @@ export class ProductsService {
       throw new NotFoundException('Product not found')
     }
     return deletedProduct
+  }
+
+  private verifyCategory(categoryId: string) {
+    const findCategory = this.categoriesService.findOne(categoryId)
+
+    if (!findCategory) {
+      throw new NotFoundException('Category not found')
+    }
   }
 }

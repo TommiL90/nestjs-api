@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ConflictException, Injectable } from '@nestjs/common'
+import { CreateCategoryDto } from './dto/create-category.dto'
+import { UpdateCategoryDto } from './dto/update-category.dto'
+import { CategoriesRepository } from './repositories/categories.repository'
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(private categoriesRepository: CategoriesRepository) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const findCategory = await this.categoriesRepository.findByName(
+      createCategoryDto.name,
+    )
+    if (findCategory) {
+      throw new ConflictException('Category already exists')
+    }
+
+    const newCategory = await this.categoriesRepository.create(
+      createCategoryDto,
+    )
+
+    return newCategory
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    return await this.categoriesRepository.findAll()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const retrieveCategory = await this.categoriesRepository.findOne(id)
+
+    return retrieveCategory
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    const updatedCategory = await this.categoriesRepository.update(
+      id,
+      updateCategoryDto,
+    )
+
+    return updatedCategory
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const deleteCategory = await this.categoriesRepository.findOne(id)
+    if (!deleteCategory) {
+      throw new ConflictException('Category not found')
+    }
+    await this.categoriesRepository.remove(id)
   }
 }

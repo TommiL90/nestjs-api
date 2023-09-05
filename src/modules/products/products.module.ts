@@ -6,8 +6,10 @@ import { MulterModule } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { ProductsRepository } from './repositories/products.repository'
 import { ProductsPrismaRepository } from './repositories/prisma/products.prisma.repository'
+import { CategoriesModule } from '../categories/categories.module'
 @Module({
   imports: [
+    CategoriesModule,
     MulterModule.register({
       storage: diskStorage({
         destination: './temp',

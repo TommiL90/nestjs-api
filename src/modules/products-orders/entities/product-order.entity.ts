@@ -1,16 +1,17 @@
 import { randomUUID } from 'crypto'
 
-export class Category {
+export class ProductOrder {
   readonly id: string
 
-  name: string
+  productId: string
 
-  createdAt: Date
+  orderId: string
 
-  updatedAt: Date
+  quantity: number
+
+  price: number
 
   constructor() {
     this.id = randomUUID()
-    this.createdAt = new Date()
   }
 }
