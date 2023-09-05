@@ -4,9 +4,10 @@ import { ProductsController } from './products.controller'
 import { PrismaService } from 'src/database/prisma.service'
 import { MulterModule } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
+import { CategoriesModule } from '../categories/categories.module'
 import { ProductsRepository } from './repositories/products.repository'
 import { ProductsPrismaRepository } from './repositories/prisma/products.prisma.repository'
-import { CategoriesModule } from '../categories/categories.module'
+
 @Module({
   imports: [
     CategoriesModule,
@@ -35,5 +36,6 @@ import { CategoriesModule } from '../categories/categories.module'
       useClass: ProductsPrismaRepository,
     },
   ],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

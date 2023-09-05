@@ -16,8 +16,8 @@ import { ProductsOrderModule } from './modules/products-orders/product-order.mod
     TasksModule,
     ProductsModule,
     CategoriesModule,
-    OrdersModule,
     ProductsOrderModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}
