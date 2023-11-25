@@ -18,7 +18,7 @@ export class ProductsService {
   ) {}
 
   async create(createProductDto: CreateProductDto) {
-    this.verifyCategory(createProductDto.categoryId)
+    await this.verifyCategory(createProductDto.categoryId)
 
     const findProduct = await this.productsRepository.findOne(
       createProductDto.sku,
@@ -52,7 +52,7 @@ export class ProductsService {
   }
 
   // eslint-disable-next-line no-undef
-  async upload(sku: string, coverImage: Express.Multer.File) {
+  async upload(sku: string, productImage: Express.Multer.File) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
       api_key: process.env.API_KEY,
@@ -66,7 +66,7 @@ export class ProductsService {
     }
 
     const uploadedImage = await cloudinary.uploader.upload(
-      coverImage.path,
+      productImage.path,
       { resource_type: 'image' },
       (error, result) => {
         if (error) {
@@ -82,7 +82,7 @@ export class ProductsService {
       imgUrl: uploadedImage.secure_url,
     })
 
-    unlink(coverImage.path, (err) => {
+    unlink(productImage.path, (err) => {
       if (err) {
         console.log(err)
       }
@@ -99,9 +99,8 @@ export class ProductsService {
     return deletedProduct
   }
 
-  private verifyCategory(categoryId: string) {
-    const findCategory = this.categoriesService.findOne(categoryId)
-
+  private async verifyCategory(categoryId: string) {
+    const findCategory = await this.categoriesService.findOne(categoryId)
     if (!findCategory) {
       throw new NotFoundException('Category not found')
     }

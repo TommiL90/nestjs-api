@@ -10,6 +10,7 @@ import { plainToInstance } from 'class-transformer'
 export class ProductsPrismaRepository implements ProductsRepository {
   constructor(private prisma: PrismaService) {}
   async create(data: CreateProductDto): Promise<Product> {
+    console.table(data)
     const product = new Product()
     Object.assign(product, data)
 
@@ -21,7 +22,9 @@ export class ProductsPrismaRepository implements ProductsRepository {
   }
 
   async findAll(): Promise<Product[]> {
-    const products = await this.prisma.product.findMany()
+    const products = await this.prisma.product.findMany({
+      include: { category: true },
+    })
     return plainToInstance(Product, products)
   }
 
@@ -29,7 +32,6 @@ export class ProductsPrismaRepository implements ProductsRepository {
     const retrieveProduct = await this.prisma.product.findUnique({
       where: { sku },
     })
-
     return plainToInstance(Product, retrieveProduct)
   }
 

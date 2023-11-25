@@ -4,6 +4,7 @@ export class Product {
   readonly id: string
   name: string
   price: number
+  brand: string
   description: string
   stock: number
   sku: string

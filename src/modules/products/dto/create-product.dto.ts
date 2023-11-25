@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -24,8 +26,8 @@ export class CreateProductDto {
   name: string
 
   @ApiProperty({
-    example: 'Product description',
-    description: 'Description of the product',
+    example: 'Royal Canin',
+    description: 'Brand of the product',
     required: true,
     type: String,
     minLength: 3,
@@ -34,6 +36,20 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(120)
+  @MinLength(3)
+  brand: string
+
+  @ApiProperty({
+    example: 'Product description',
+    description: 'Description of the product',
+    required: true,
+    type: String,
+    minLength: 3,
+    maxLength: 300,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(300)
   @MinLength(3)
   description: string
 
@@ -54,6 +70,8 @@ export class CreateProductDto {
     type: Number,
   })
   @IsNumber()
+  @IsInt()
+  @IsPositive()
   @IsNotEmpty()
   stock: number
 
@@ -77,6 +95,10 @@ export class CreateProductDto {
     required: true,
     type: String,
   })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  @MinLength(3)
   sku: string
 
   @ApiProperty({
